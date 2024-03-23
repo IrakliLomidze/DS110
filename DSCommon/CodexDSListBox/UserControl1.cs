@@ -94,7 +94,8 @@ namespace ILG.Codex.CodexDSListBox
         private Font Titlefont;
         private Font TitleNumberfont;
         private Font Captionfont;
-        
+
+        public bool IsPreviewFiled { set; get; } = true;
 
 
         public CodexDSListBox()
@@ -124,13 +125,13 @@ namespace ILG.Codex.CodexDSListBox
         public event PreviewDocumentEventHandler PreviewDocument;
 
         protected virtual void OnDocumentClick(CodexDSListEventArgs e)
-         {
-             DocumentClick(this, e);
-         }
+        {
+            if (DocumentClick != null) DocumentClick(this, e);
+        }
 
         protected virtual void OnDocumentPreview()
         {
-            PreviewDocument(this);
+            if (PreviewDocument != null) PreviewDocument(this);
         }
 
 
@@ -707,7 +708,10 @@ namespace ILG.Codex.CodexDSListBox
             Active_ID = (int)@DataSource[this.listBox1.SelectedIndex][IDField];
 
             
-            Active_Preview = @DataSource[this.listBox1.SelectedIndex][PreviewField].ToString();
+            if (this.IsPreviewFiled == true)
+                Active_Preview = @DataSource[this.listBox1.SelectedIndex][PreviewField].ToString();
+            else Active_Preview = "";
+
             Active_DocStatus = (int)@DataSource[this.listBox1.SelectedIndex][StatusField];
             Active_DocType = (int)@DataSource[this.listBox1.SelectedIndex]["C_DocFormat"];
 
